@@ -32,8 +32,11 @@ These are located in bucket:
 https://templates.teemops.com.s3-us-west-2.amazonaws.com
 
 IAM templates:
-Root Account: https://templates.teemops.com.s3-us-west-2.amazonaws.com/iam/iam.ec2.root.role.cfn.yaml
-Child Account(s): https://templates.teemops.com.s3-us-west-2.amazonaws.com/iam/iam.role.child.account.cfn.yaml
+Root Account: https://templates.teemops.com.s3-us-west-2.amazonaws.com/iam.ec2.root.role.cfn.yaml
+Child Account(s): https://templates.teemops.com.s3-us-west-2.amazonaws.com/iam.role.child.account.cfn.yaml
+
+Cloudwatch event templates: (These are only created in each region the first time a launch config is added for a region)
+https://templates.teemops.com.s3-us-west-2.amazonaws.com/cw.notify.child.account.cfn.yaml
 
 # AWS Setup Explanation
 Teemops works using Cross Account IAM Role access which allows it to manage multiple resources in an unlimited number of AWS Accounts.

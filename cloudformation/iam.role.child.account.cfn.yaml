@@ -286,6 +286,13 @@ Resources:
                 Effect: Allow
                 Resource: '*'
           PolicyName: IAMRoleTeemOpsPolicy
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - 'events:*'
+                Effect: Allow
+                Resource: '*'
+          PolicyName: CloudWatchEventsTeemOpsPolicy
 Outputs:
   ARN:
     Description: ARN Required to complete your AWS Account Setup in TeemOps

@@ -12,7 +12,6 @@ SCRIPTS_FOLDER=scripts
 REPO_THIS=https://github.com/teemops/teemops.git
 REPO_API=https://github.com/teemops/core-api.git
 REPO_UI=https://github.com/teemops/teemops-ui.git
-REPO_BACKEND=https://github.com/teemops/teemops-serverless.git
 CFN_ROOT_IAM=https://raw.githubusercontent.com/teemops/teemops/master/cloudformation/iam.ec2.root.role.cfn.yaml
 OS_VERSION="UNSUPPORTED"
 

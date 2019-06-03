@@ -57,11 +57,14 @@ Resources:
             Action: 
               - "sns:*"
               - "cloudformation:*"
-              - "SQS:*"
+              - "sqs:*"
               - "dynamoDb:*"
               - "s3:*"
               - "events:*"
               - "cloudwatch:*"
+              - "ec2:*"
+              - "rds:*"
+              - "ssm:*"
             Resource: "*"
   TeemOpsEventBusPolicy: 
     Type: AWS::Events::EventBusPolicy
@@ -69,4 +72,8 @@ Resources:
         Action: "events:PutEvents"
         Principal: "*"
         StatementId: "TopsAllowCrossAccountEvents"
-
+Outputs:
+  InstanceProfile:
+    Value: !GetAtt
+      - TeemOpsInstanceProfile
+      - Arn

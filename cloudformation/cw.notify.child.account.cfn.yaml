@@ -10,9 +10,32 @@ Parameters:
     MinLength: 12
     MaxLength: 12
     Default: '163057906376'
-  IAMRoleArn:
-    Type: String
 Resources:
+  TopsCWEventRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - 'events.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - 'Events:PutEvents'
+                Effect: Allow
+                Resource:
+                  Fn::Join:
+                    - ''
+                    - - 'arn:aws:events:*:'
+                      - !Ref ParentAWSAccountId
+                      - ':event-bus/default'
+          PolicyName: CWPutEventsTeemOpsPolicy
   TopsCWEventPolicy:
     Type: AWS::Events::EventBusPolicy
     Properties: 
@@ -35,7 +58,10 @@ Resources:
                 - !Ref ParentAWSAccountId
                 - ':event-bus/default'
           Id: "TargetAWSRootTeemops"
-          RoleArn: !Ref IAMRoleArn
+          RoleArn:
+            Fn::GetAtt:
+              - TopsCWEventRole
+              - Arn
       EventPattern: '{
   "source": [
     "aws.ec2"
