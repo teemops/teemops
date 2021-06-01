@@ -1,0 +1,1882 @@
+{
+	"info": {
+		"_postman_id": "effc016e-c745-2141-86c0-92ddbc6d2a06",
+		"name": "Teemops",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User - Check username exists",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{url}}api/users/check/kiwifellows",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"users",
+						"check",
+						"kiwifellows"
+					]
+				},
+				"description": "Checks if a username already exists."
+			},
+			"response": []
+		},
+		{
+			"name": "User - Register",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"username\":\"{{test_user}}\",\n \"password\":\"{{password}}\",\n \"first\": \"Bob\",\n \"last\": \"Smith\",\n \"email\": \"{{email}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/users",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "Registers a user with email and sends a confirmation code to email."
+			},
+			"response": []
+		},
+		{
+			"name": "User - Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"poc@teem.cloud\",\"password\":\"Project99\"}"
+				},
+				"url": {
+					"raw": "{{url}}api/users/login",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				},
+				"description": "Login existing user with email and password"
+			},
+			"response": []
+		},
+		{
+			"name": "App - Add a new App",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"appid\": null,\n    \"name\": \"abc\",\n    \"appdomain\": null,\n    \"appurl\": null,\n    \"status\": 0,\n    \"cloud\": 1,\n    \"region\": null,\n    \"appProviderId\": 13,\n    \"userCloudProviderId\": 119,\n    \"database\": null,\n    \"caching\": null,\n    \"sourceCode\": {\n        \"source\": null,\n        \"authenticated\": null,\n        \"path\": null\n    },\n    \"asg\": {\n        \"enabled\": true,\n        \"groupsize\": 1,\n        \"groupmax\": 3,\n        \"loadbalancer\": true\n    },\n    \"platformId\": 1,\n    \"cloudProviderDesc\": \"Launch Apps and Services on AWS\",\n    \"configData\": {\n        \"cloud\": {\n            \"diskSize\": 30\n        }\n    },\n    \"appProviderSummary\": \"Ubuntu 18.04 LTS<br/>Ubuntu 18.04 LTS Base Image\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/apps/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"apps",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "App - List all My Apps",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}api/apps/list",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "App - Update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"appid\": 84,\n    \"name\": \"abc001\",\n    \"status\": 0,\n    \"cloud\": 1,\n    \"app_provider_id\": 2,\n    \"appurl\": \"abc001.teemops.com\",\n    \"config_data\": {\n        \"myapp_custom1\": \"djsbjdbad\",\n        \"more_fields\": \"7687263\"\n    },\n    \"region\": \"Australia\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/update",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"update"
+					]
+				},
+				"description": "Updates App"
+			},
+			"response": []
+		},
+		{
+			"name": "App - Launch first time",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userid\": 67,\n    \"appid\": 59,\n    \"action\": \"ec2.launch\",\n    \"task\": \"ec2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/launch",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"launch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "App - Get an App",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/credentials/listByUserId/72",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"credentials",
+						"listByUserId",
+						"72"
+					]
+				},
+				"description": "Gets an App by ID -use api/apps/list to get all your apps."
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/apps/infra/173",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/apps/infra/59",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"apps",
+						"infra",
+						"59"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/users",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"email\":\"kiwifellows@gmail.com\",\n \"password\":\"project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/apps/search/7",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjQ2LCJlbWFpbCI6ImJlbkB0ZWVtLm56IiwiaWF0IjoxNDU5NzQ4MTMxfQ.YNyuL6ESmQT280m0ZBqKIidjT_ZxgMD9UG-aLOXGrYw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/apps/search/a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"apps",
+						"search",
+						"a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}api/apps/update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjY3LCJ1c2VybmFtZSI6Imtpd2lmZWxsb3dzIiwiZW1haWwiOiJraXdpZmVsbG93c0BnbWFpbC5jb20iLCJpYXQiOjE1NTYyNDI4OTQsImV4cCI6MTU1NjI1MDA5NH0.xDRFASQNs1AyWxqSWLo6xnROwL4l2hsDUKTzyivYv10",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"appId\":24,\"name\":\"test-123\",\"appurl\":null,\"status\":1,\"configData\":{\"cloud\":{\"diskSize\":50}},\"timestamp\":\"2019-04-23T23:12:27.000Z\",\"appProviderId\":3,\"userCloudProviderId\":115,\"awsAccountId\":\"561280630638\",\"accountName\":\"teemops-dev\",\"userDataProviderId\":27,\"awsConfigId\":null,\"cloud\":1,\"os\":null,\"appProviderName\":\"Redhat 7\",\"appProviderDesc\":\"Latest Supported Redhat 7\",\"cloudProviderDesc\":\"Launch Apps and Services on AWS\",\"authData\":null,\"awsConfigName\":null,\"region\":null,\"appProviderSummary\":\"Redhat 7<br/>Latest Supported Redhat 7\",\"statusInfo\":{\"name\":\"READY\",\"desc\":\"Ready\",\"action\":\"Start\",\"actionIcon\":\"play_arrow\",\"disabled\":false,\"textCssClass\":\"\"}}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/update",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EC2 Task",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"awsAccountId\": 120,\n    \"className\": \"ACM\",\n    \"task\": \"listCertificates\",\n    \"params\": {},\n    \"region\": \"ap-southeast-2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/general",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"general"
+					]
+				},
+				"description": "Get EC2 Key Pair"
+			},
+			"response": []
+		},
+		{
+			"name": "EC2 Describe Subnets Example",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 120,\n\t\"task\": \"describeSubnets\",\n\t\"params\": {},\n\t\"region\": \"us-west-2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/ec2",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"ec2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EC2 Describe Regions Example",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjY3LCJ1c2VybmFtZSI6Imtpd2lmZWxsb3dzIiwiZW1haWwiOiJraXdpZmVsbG93c0BnbWFpbC5jb20iLCJpYXQiOjE1NTY3NjU2MzYsImV4cCI6MTU1Njc3MjgzNn0.k06SB6-_cFbeSPJbP-i3240YsfEoxYsKbk-z7-ZRByk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 115,\n\t\"task\": \"describeRegions\",\n\t\"params\": {},\n\t\"region\": \"us-west-2\",\n\t\"filter\": \"Regions[]\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/ec2",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"ec2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}api/apps/pricing",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOjY3LCJ1c2VybmFtZSI6Imtpd2lmZWxsb3dzIiwiZW1haWwiOiJraXdpZmVsbG93c0BnbWFpbC5jb20iLCJpYXQiOjE1NTY3NjU2MzYsImV4cCI6MTU1Njc3MjgzNn0.k06SB6-_cFbeSPJbP-i3240YsfEoxYsKbk-z7-ZRByk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 115,\n\t\"task\": \"getProducts\",\n\t\"params\": {},\n\t\"region\": \"us-east-1\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/pricing",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"pricing"
+					]
+				},
+				"description": "Pricing example"
+			},
+			"response": []
+		},
+		{
+			"name": "Basic List Available Services",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 115,\n\t\"task\": \"describeServices\",\n\t\"params\": {\"ServiceCode\": \"AmazonEc2\"},\n\t\"region\": \"us-east-1\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/pricing",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"pricing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products Pricing",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 115,\n\t\"task\": \"getProducts\",\n\t\"params\": {\n\t\t\"ServiceCode\": \"AmazonEC2\",\n\t\t\"Filters\": [\n\t\t\t{\n\t\t\t\t\"Field\": \"termType\",\n\t\t\t\t\"Type\": \"TERM_MATCH\",\n\t\t\t\t\"Value\": \"OnDemand\"\n\t\t\t}\n\t\t]\n\t},\n\t\"region\": \"us-east-1\",\n\t\"filter\": \"PriceList[].{Memory:product.attributes.memory, SW: product.attributes.preInstalledSw, location: product.attributes.location, instanceType: product.attributes.instanceType, term: terms}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/pricing",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"pricing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pricing Apps",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 115,\n\t\"task\": \"getAttributeValues\",\n\t\"params\": {\n\t\t\"ServiceCode\": \"AmazonEc2\",\n\t\t\"AttributeName\": \"preInstalledSw\"\n\t},\n\t\"region\": \"us-east-1\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/pricing",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"pricing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Instance Types for Region",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"region\": \"us-east-1\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/pricing/",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"pricing",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get App Providers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"url": {
+					"raw": "{{url}}api/apps/providers",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"providers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}api/apps/pricing",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 115,\n\t\"task\": \"getAttributeValues\",\n\t\"params\": {\n\t\t\"ServiceCode\": \"AmazonEc2\",\n\t\t\"AttributeName\": \"capacitystatus\"\n\t},\n\t\"region\": \"us-east-1\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/pricing",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"pricing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}api/data/regions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"region\":\"ap-southeast-2\"}"
+				},
+				"url": {
+					"raw": "{{url}}api/data/regions",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"data",
+						"regions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}api/pricing/instance_types",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"region\":\"ap-southeast-2\"}"
+				},
+				"url": {
+					"raw": "{{url}}api/pricing/instance_types",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"pricing",
+						"instance_types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Launch Config",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":0,\"name\":\"30-sept-small\",\"userId\":67,\"userCloudProviderId\":117,\"vpc\":\"vpc-fed98899\",\"appSubnet\":\"subnet-baccf5dd\",\"appSecurityGroup\":\"sg-0aa811e25a16e6e3d\",\"appInstanceType\":\"t2.small\",\"customData\":null,\"region\":\"ap-southeast-2\",\"arn\":\"arn:aws:iam::163057906376:role/TeemOpsCloudApp\"}"
+				},
+				"url": {
+					"raw": "{{url}}api/usercloudconfigs",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"usercloudconfigs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Launch Configs by UserId",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":0,\"name\":\"30-sept-small\",\"userId\":67,\"userCloudProviderId\":117,\"vpc\":\"vpc-fed98899\",\"appSubnet\":\"subnet-baccf5dd\",\"appSecurityGroup\":\"sg-0aa811e25a16e6e3d\",\"appInstanceType\":\"t2.small\",\"customData\":null,\"region\":\"ap-southeast-2\",\"arn\":\"arn:aws:iam::163057906376:role/TeemOpsCloudApp\"}"
+				},
+				"url": {
+					"raw": "{{url}}api/usercloudconfigs/listByUserId/68",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"usercloudconfigs",
+						"listByUserId",
+						"68"
+					]
+				},
+				"description": "View all launch configs for a user, only allows you to view launch configs you have permission to view."
+			},
+			"response": []
+		},
+		{
+			"name": "Configs - Update",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"id\": 13,\n            \"name\": \"Test-dev-nano\",\n            \"userId\": 67,\n            \"userCloudProviderId\": 105,\n            \"awsAccountId\": \"163057906376\",\n            \"vpc\": \"vpc-8e5a32e7\",\n            \"appSubnet\": \"subnet-58cdb431,subnet-2650ec5d\",\n            \"dbSubnet\": null,\n            \"elbSecurityGroup\": null,\n            \"appSecurityGroup\": \"sg-30444859\",\n            \"dbSecurityGroup\": null,\n            \"appInstanceType\": \"t2.nano\",\n            \"dbInstanceType\": null,\n            \"cacheInstanceType\": null,\n            \"customData\": null,\n            \"region\": \"ap-northeast-2\"\n        }"
+				},
+				"url": {
+					"raw": "{{url}}api/usercloudconfigs",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"usercloudconfigs"
+					]
+				},
+				"description": "Update an existing Launch Config"
+			},
+			"response": []
+		},
+		{
+			"name": "Get EC2 Key Pair",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": \"819596643887\",\n\t\"region\": \"ap-southeast-2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/key",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"key"
+					]
+				},
+				"description": "Gets your Teem Ops EC2 key pair for given region and aws account ID."
+			},
+			"response": []
+		},
+		{
+			"name": "EC2 Task - RDS Example",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"awsAccountId\": 118,\n\t\"task\": \"describeDBInstances\",\n\t\"params\": {},\n\t\"region\": \"ap-southeast-2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/ec2",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"ec2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unsupported resource",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userId\": 67,\n  \"arn\": \"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/usercloudproviders/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"usercloudproviders",
+						"search"
+					]
+				},
+				"description": "Lists app providers (e.g. prebuilt app configurations and OS base installations)."
+			},
+			"response": []
+		},
+		{
+			"name": "General AWS Client Task",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"awsAccountId\": 135,\n    \"className\": \"ACM\",\n    \"task\": \"listCertificates\",\n    \"params\": {},\n    \"region\": \"ap-southeast-2\",\n    \"filter\": \"CertificateSummaryList[].{Name: DomainName, Arn: CertificateArn }\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/general",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"general"
+					]
+				},
+				"description": "General AWS Client Task\t"
+			},
+			"response": []
+		},
+		{
+			"name": "App - Code Deploy first time",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userid\": 67,\n    \"appid\": 59,\n    \"action\": \"ec2.launch\",\n    \"task\": \"ec2\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/deploy",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"deploy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User - Reset Password Step 1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"email\":\"poc-demo@teem.cloud\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/users/reset",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"users",
+						"reset"
+					]
+				},
+				"description": "Reset password step 1"
+			},
+			"response": []
+		},
+		{
+			"name": "User - Reset Password Step 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"email\":\"ben@teemops.com\",\n \"code\" : 689375,\n \"password\": \"Project99\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/users/reset/code",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"users",
+						"reset",
+						"code"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Infra Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{url}}api/apps/infra/78",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"infra",
+						"78"
+					]
+				},
+				"description": "Gets Infra details from Instances"
+			},
+			"response": []
+		},
+		{
+			"name": "Get EC2 Key Pair",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"region\":\"ap-southeast-2\",\n    \"awsAccountId\": \"679625939085\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/key",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"key"
+					]
+				},
+				"description": "Gets EC2 Key Pair generated by Teemops"
+			},
+			"response": []
+		},
+		{
+			"name": "List EC2 Keypairs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{jwt}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}api/users/keys",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"users",
+						"keys"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Windows Password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const path='api/users/login';",
+							"var url=pm.environment.get(\"url\");",
+							"const loginRequest = {",
+							"  url: url+path,",
+							"  method: 'POST',",
+							"  header: 'Content-Type:application/json',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+							"  }",
+							"};",
+							"pm.sendRequest(loginRequest, function (err, response) {",
+							"    if(response!==null){",
+							"        console.log(response.json());",
+							"        if(response.json().status){",
+							"            console.log(response.json().token);",
+							"            pm.environment.set(\"jwt\", response.json().token);",
+							"        }else{",
+							"            console.log(\"JWT not set login incorrect\");",
+							"        }",
+							"        ",
+							"    }else{",
+							"       console.log(\"Response error\"); ",
+							"    }",
+							"    ",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"awsAccountId\": 140,\n    \"className\": \"SNS\",\n    \"task\": \"listTopics\",\n    \"params\": {},\n    \"region\": \"ap-southeast-2\",\n    \"filter\":\"Topics[]\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}api/apps/general",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"apps",
+						"general"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const path='api/users/login';",
+					"var url=pm.environment.get(\"url\");",
+					"const loginRequest = {",
+					"  url: url+path,",
+					"  method: 'POST',",
+					"  header: 'Content-Type:application/json',",
+					"  body: {",
+					"    mode: 'raw',",
+					"    raw: JSON.stringify({ email: pm.environment.get(\"email\"), password: pm.environment.get(\"password\") })",
+					"  }",
+					"};",
+					"pm.sendRequest(loginRequest, function (err, response) {",
+					"    if(response!==null){",
+					"        console.log(response.json());",
+					"        if(response.json().status){",
+					"            console.log(response.json().token);",
+					"            pm.environment.set(\"jwt\", response.json().token);",
+					"        }else{",
+					"            console.log(\"JWT not set login incorrect\");",
+					"        }",
+					"        ",
+					"    }else{",
+					"       console.log(\"Response error\"); ",
+					"    }",
+					"    ",
+					"    ",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
