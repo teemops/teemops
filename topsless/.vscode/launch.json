@@ -1,0 +1,46 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Serverless Offline",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/home/ben/.nvm/versions/node/v20.18.0/bin/npm",
+      "runtimeArgs": [
+        "run",
+        "debug",
+        "--verbose"
+      ],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "outputCapture": "std"
+    },
+    {
+      "name": "LaunchScript",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${fileDirname}",
+      // "runtimeExecutable": "/home/ben/.nvm/versions/node/v20.18.0/bin/npm",
+      "port": 9229,
+      "envFile": "${workspaceFolder}/.env"
+      // "args": [
+      //     "-mfa",
+      //     "${input:mfaToken}"
+      // ],
+    }
+  ],
+  "inputs": [
+    {
+      "id": "mfaToken",
+      "type": "promptString",
+      "description": "Enter MFA Token",
+      "default": ""
+    }
+  ]
+}

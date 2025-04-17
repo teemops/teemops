@@ -1,0 +1,3 @@
+/.topsbuild/*.zip
+#remove any sensitive files including .env from anywhere in the project
+.env

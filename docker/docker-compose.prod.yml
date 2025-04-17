@@ -1,0 +1,131 @@
+services:
+  mysql:
+    build:
+      context: ./api/mysql/
+    platform: "linux/amd64"
+    image: mysql:8.0
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - $PWD/.teemops/state/mysql/data:/var/lib/mysql
+      - $PWD/mysql/dump:/docker-entrypoint-initdb.d
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - "3306:3306"
+    # expose:
+    #   # Opens port 3306 on the container
+    #   - '3306'
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: ${DB_USER}
+      # You can use whatever password you like
+      MYSQL_PASSWORD: ${DB_PASS}
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - $PWD/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - $PWD/nginx/sites-enabled:/etc/nginx/sites-enabled
+    depends_on:
+      - api
+  api:
+    # build:
+    #   context: ./api
+    # command: npm run dev
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/users"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    platform: "linux/amd64"
+    image: teem/tops-api:${DOCKER_IMAGE_TAG:-dev}
+    # restart: always
+    volumes:
+      - ${HOME}/.aws:/root/.aws
+      - ${PWD}/.teemops/state/api:/state
+    ports:
+      - "8080:8080"
+    environment:
+      MODE: ${MODE}
+      PORT: ${PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_QUERY_TIMEOUT: 10000
+      AWS_ACCOUNT_ID: ${AWS_ACCOUNT_ID}
+      CONFIRM_SECRET: ${CONFIRM_SECRET}
+      SECRET: ${SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      STRIPE_KEY: ${STRIPE_KEY}
+      BASE_URL: ${BASE_URL}
+      S3_KEY_STORE: ${S3_KEY_STORE}
+      S3_APP_BUCKET: ${S3_APP_BUCKET}
+      S3_APP_BUCKET_REGION: ${S3_APP_BUCKET_REGION}
+      S3_APP_PATH: ${S3_APP_PATH}
+      MFA_AUTH_API: ${MFA_AUTH_API}
+      DATABASE_URL: ${DATABASE_URL}
+
+  status:
+    command: npm run status-dev
+    depends_on:
+      api:
+        condition: service_healthy
+    platform: "linux/amd64"
+    image: teem/tops-api:${DOCKER_IMAGE_TAG:-dev}
+    # restart: always
+    volumes:
+      - ${HOME}/.aws:/root/.aws
+      - ${PWD}/.teemops/state/api:/state
+    environment:
+      MODE: ${MODE}
+      PORT: ${PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_QUERY_TIMEOUT: 10000
+      AWS_ACCOUNT_ID: ${AWS_ACCOUNT_ID}
+      CONFIRM_SECRET: ${CONFIRM_SECRET}
+      SECRET: ${SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      STRIPE_KEY: ${STRIPE_KEY}
+      BASE_URL: ${BASE_URL}
+      S3_KEY_STORE: ${S3_KEY_STORE}
+      S3_APP_BUCKET: ${S3_APP_BUCKET}
+      S3_APP_BUCKET_REGION: ${S3_APP_BUCKET_REGION}
+      S3_APP_PATH: ${S3_APP_PATH}
+      MFA_AUTH_API: ${MFA_AUTH_API}
+      DATABASE_URL: ${DATABASE_URL}
+  ui:
+    image: teem/tops-ui:${DOCKER_IMAGE_TAG:-dev}
+    restart: always
+    command: npm run devdocker
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      MODE: ${MODE}
+      API_URL: ${API_URL}
+      STRIPE_KEY: ${STRIPE_KEY}
+      STRIPE_LINK: "disabled"
+
+volumes:
+  db_data: {}

@@ -1,0 +1,7 @@
+[{"id":1, "type":"default"},
+ {"id":2, "type":"asg"},
+ {"id":3, "type":"asg.alb"},
+ {"id":4, "type":"ecs"},
+ {"id":5, "type":"ecs.alb"},
+ {"id":6, "type":"sls"},
+ {"id":7, "type":"sls.alb"}]

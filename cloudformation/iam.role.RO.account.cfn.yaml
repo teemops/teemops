@@ -1,0 +1,42 @@
+## Template for IAM Role for Cloud Auditing
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "IAM role for an account to be accessed by NZS Cloud Auditing Account"
+Parameters:
+  # Parent AWS Account
+  ParentAWSAccountId:
+    Type: String
+    Description: "The AWS Account ID of the auditing account"
+    AllowedPattern: "[0-9]{12}"
+    MinLength: 12
+    MaxLength: 12
+    Default: "163057906376"
+Resources:
+  # Auditing Read-Only
+  TopsAuditRO:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+        - "arn:aws:iam::aws:policy/ResourceGroupsandTagEditorReadOnlyAccess"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              AWS: !Ref ParentAWSAccountId
+            Action:
+              - "sts:AssumeRole"
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: true
+Outputs:
+  RoleArn:
+    Description: "The ARN of the role"
+    Value: !GetAtt
+      - TopsAuditRO
+      - Arn
+  RoleName:
+    Description: "The name of the role"
+    Value: !Ref TopsAuditRO
+
+

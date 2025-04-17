@@ -1,0 +1,11 @@
+[{"id":1, "name":"READY", "description":"App is ready"},
+ {"id":2, "name":"STARTING", "description":"'Start' command issued to job queue"},
+ {"id":3, "name":"STARTED", "description":"App is running"},
+ {"id":4, "name":"STOPPING", "description":"'Stop' command issued to job queue"},
+ {"id":5, "name":"STOPPED", "description":"App is stopped"},
+ {"id":6, "name":"INITIALISING", "description":"App has been created but is not yet ready to run"},
+ {"id":7, "name":"NEW", "description":"New App"},
+ {"id":8, "name":"RESTARTING", "description":"Restarting apps instance"},
+ {"id":9, "name":"DELETING", "description":"Deleting apps instance"},
+ {"id":10, "name":"ARCHIVED", "description":"Archived apps instance"},
+ {"id":11, "name":"UPDATING", "description":"'Update' command issued to job queue"}]

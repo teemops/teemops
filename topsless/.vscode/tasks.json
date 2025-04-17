@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run tests",
+            "command": "LaunchScript",
+            "args": [
+                "mfa",
+                "'${input:mfaToken}'"
+            ],
+        },
+    ],
+    "inputs": [
+        {
+            "id": "mfaToken",
+            "type": "promptString",
+            "description": "Enter MFA Token",
+            "default": ""
+        }
+    ]
+}

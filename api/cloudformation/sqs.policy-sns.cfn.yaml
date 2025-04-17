@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SQS IAM Policy for Teemops SNS Topic
+Parameters:
+  SQSLabel:
+    Type: String
+    Description: "Teemops SQS Label"
+    Default: "teemops_main"
+  SQSRegion:
+    Type: String
+    Description: "Teemops SQS Region"
+    Default: "us-west-2"
+Resources:
+  TopsMainSQSPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - Fn::Join:
+            - ""
+            - - "https://sqs."
+              - !Ref SQSRegion
+              - ".amazonaws.com/"
+              - !Ref "AWS::AccountId"
+              - "/"
+              - !Ref SQSLabel
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: allow-sns-topsa
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - SQS:SendMessage
+              - SQS:ReceiveMessage
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:sqs:"
+                    - !Ref SQSRegion
+                    - ":"
+                    - !Ref "AWS::AccountId"
+                    - ":"
+                    - !Ref SQSLabel
+            Condition:
+              ArnLike:
+                "aws:SourceArn":
+                  - Fn::Join:
+                      - ""
+                      - - "arn:aws:sns:*:"
+                        - !Ref "AWS::AccountId"
+                        - ":teemops-sns"

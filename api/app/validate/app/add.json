@@ -1,0 +1,9 @@
+{
+  "fields": [
+    {
+      "key": "appid",
+      "required": true,
+      "type": "Number"
+    }
+  ]
+}

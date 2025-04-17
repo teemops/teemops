@@ -1,0 +1,63 @@
+## Template for IAM Role
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "IAM role for an account to be accessed by NZS Cloud Auditing Account"
+Parameters:
+  # Parent AWS Account
+  ParentAWSAccountId:
+    Type: String
+    Description: "The AWS Account ID of the auditing account"
+    AllowedPattern: "[0-9]{12}"
+    MinLength: 12
+    MaxLength: 12
+    Default: "163057906376"
+Resources:
+  TopsCustomNotifier:
+    Type: Custom::CloudAuditPingSNS
+    Version: 1.0
+    Properties:
+      ServiceToken: !Join
+        - ''
+        - - 'arn:aws:sns:'
+          - !Ref "AWS::Region"
+          - ':'
+          - !Ref ParentAWSAccountId
+          - ':teemops-sns'
+      TopsRoleArn: !GetAtt
+        - TopsAuditRO
+        - Arn
+      TopsType: "audit"
+  # Auditing Read-Only
+  TopsAuditRO:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+        - "arn:aws:iam::aws:policy/ResourceGroupsandTagEditorReadOnlyAccess"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              AWS: !Ref ParentAWSAccountId
+            Action:
+              - "sts:AssumeRole"
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: true
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - "ssm:SendCommand"
+                Effect: Allow
+                Resource: "arn:aws:ssm:*::document/AWS-RunPatchBaseline"
+          PolicyName: PatchScanTeemOpsPolicy
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - "ssm:SendCommand"
+                Effect: Allow
+                Resource: "arn:aws:ec2:*::instance/*"
+          PolicyName: PatchScanTeemOpsPolicyB
+
+

@@ -1,0 +1,46 @@
+{
+    "ExternalId": "cloudapi-1234",
+    "default_region": "us-west-2",
+    "s3": {
+        "key_store": "teemops-keystore-topskeystorebucket-prfhk9gan7dl"
+    },
+    "sqs": {
+        "endpoint": "https://sqs.us-west-2.amazonaws.com",
+        "region": "us-west-2",
+        "jobsq": "teemops_main"
+    },
+    "cfn": {
+        "endpoint": "https://cloudformation.us-west-2.amazonaws.com",
+        "templates": "https://s3.amazonaws.com/storage.auditaws.com/"
+    },
+    "kms": {
+        "endpoint": "https://kms.us-west-2.amazonaws.com",
+        "defaultKeyName": "alias/tops/teemops",
+        "region": "us-west-2"
+    },
+    "ec2": {
+        "region": "us-west-2"
+    },
+    "s3meta": {
+        "region": "us-west-2"
+    },
+    "notify": {
+        "table": "topsnotify",
+        "region": "us-west-2"
+    },
+    "smq": {
+        "queues": [
+            {
+                "name": "vm",
+                "path": "apps/vm/",
+                "Description": "MQ"
+            },
+            {
+                "name": "vmtags",
+                "path": "apps/vm/",
+                "Description": "MQ"
+            }
+        ]
+    },
+    "SNS": "teemops-sns"
+}

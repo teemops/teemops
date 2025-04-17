@@ -1,0 +1,332 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "debian-openssl-3.0.x", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model allowed_instance_types {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(45)
+  order Int?
+}
+
+model app {
+  id                     BigInt                 @id @default(autoincrement())
+  userid                 Int
+  name                   String                 @db.VarChar(255)
+  status                 Int                    @default(6)
+  cloud                  Int?
+  data                   Bytes?                 @db.Blob
+  appurl                 String?                @db.VarChar(255)
+  timestamp              DateTime?              @db.DateTime(0)
+  app_provider_id        Int
+  user_data_provider_id  Int?
+  aws_config_data_id     Int?
+  user_cloud_provider_id Int?
+  meta_data              Bytes?                 @db.Blob
+  notify                 String?                @db.Text
+  archive                Int?                   @db.TinyInt
+  isasg                  Int?                   @db.TinyInt
+  isalb                  Int?                   @db.TinyInt
+  asg_min                Int?
+  asg_max                Int?
+  platform               Int?
+  environment            Int?
+  lookup_environment     lookup_environment?    @relation(fields: [environment], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_app_environment")
+  app_provider           app_provider           @relation(fields: [app_provider_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_app_provider_id")
+  user                   user                   @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction, map: "FK_app_user_id")
+  user_data_aws_configs  user_data_aws_configs? @relation(fields: [aws_config_data_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_aws_config_data_id")
+  user_data_providers    user_data_providers?   @relation(fields: [user_data_provider_id], references: [id], onUpdate: NoAction, map: "FK_user_data_provider_id")
+
+  @@index([environment], map: "FK_app_environment_idx")
+  @@index([app_provider_id], map: "FK_app_provider_id_idx")
+  @@index([userid], map: "FK_app_user_id_idx")
+  @@index([aws_config_data_id], map: "FK_aws_config_data_id_idx")
+  @@index([user_data_provider_id], map: "FK_user_data_provider_id_idx")
+}
+
+model app_alb {
+  id        Int     @id @default(autoincrement())
+  appid     Int
+  subnets   String? @db.VarChar(255)
+  listeners String? @db.VarChar(45)
+  sslArn    String? @db.VarChar(255)
+}
+
+model app_code {
+  id     BigInt  @id @default(autoincrement())
+  appid  String? @db.VarChar(45)
+  path   String? @db.VarChar(1000)
+  source String? @db.VarChar(1000)
+}
+
+model app_integrations {
+  id            Int    @id
+  appid         BigInt
+  integrationid Int
+}
+
+model app_provider {
+  id                      Int                       @id @default(autoincrement())
+  name                    String                    @db.VarChar(255)
+  system                  String?                   @db.VarChar(255)
+  docker                  String?                   @db.VarChar(255)
+  os                      String?                   @db.VarChar(255)
+  description             String                    @db.Text
+  logo                    String?                   @db.VarChar(255)
+  type                    String                    @db.VarChar(45)
+  enabled                 String?                   @db.VarChar(45)
+  aws_account_id          String?                   @db.VarChar(30)
+  aws_ami_name            String?                   @db.Text
+  connect_user            String                    @db.VarChar(45)
+  connect_type            String                    @db.VarChar(45)
+  parentid                Int?
+  app                     app[]
+  app_provider_image_list app_provider_image_list[]
+}
+
+model app_provider_image_list {
+  id                BigInt       @id @default(autoincrement())
+  image_id          String       @db.VarChar(255)
+  cloud_provider_id Int
+  region            String       @db.VarChar(255)
+  is_custom         Int          @default(0) @db.TinyInt
+  app_provider_id   Int
+  timestamp         BigInt
+  app_provider      app_provider @relation(fields: [app_provider_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_app_provider_image_list_id")
+
+  @@index([app_provider_id], map: "FK_app_provider_id_idx")
+}
+
+model app_status {
+  id          Int    @id @default(autoincrement())
+  name        String @db.VarChar(45)
+  description String @db.VarChar(255)
+}
+
+model app_type {
+  id   Int     @id
+  type String? @db.VarChar(45)
+}
+
+model audit_accounts {
+  id          Int     @id @default(autoincrement())
+  aws_account String? @db.VarChar(20)
+  role_arn    String? @db.VarChar(255)
+}
+
+model audit_findings {
+  id          BigInt   @id @default(autoincrement())
+  guid        String   @db.VarChar(255)
+  userid      BigInt?
+  results_id  BigInt
+  scan_id     BigInt
+  service     String   @db.VarChar(45)
+  resource    String   @db.VarChar(255)
+  description String   @db.VarChar(255)
+  passed      Int      @db.TinyInt
+  severity    String   @db.VarChar(45)
+  ruleset     String   @db.VarChar(45)
+  rule        String   @db.VarChar(45)
+  timestamp   DateTime @default(now()) @db.DateTime(0)
+  region      String   @db.VarChar(45)
+}
+
+model audit_results {
+  id        BigInt   @id @default(autoincrement())
+  scan_id   Int
+  region    String?  @db.VarChar(45)
+  service   String   @db.VarChar(200)
+  task      String   @db.VarChar(200)
+  item      String   @db.VarChar(200)
+  result    Json
+  timestamp DateTime @default(now()) @db.DateTime(0)
+}
+
+model audit_scan {
+  id                     BigInt   @id @default(autoincrement())
+  user_cloud_provider_id Int
+  audit_type             Int
+  timestamp              DateTime @default(now()) @db.DateTime(0)
+  user_id                BigInt
+}
+
+model cloud_provider {
+  id                  Int                   @id
+  name                String                @db.VarChar(45)
+  description         String?               @db.VarChar(255)
+  logo                String?               @db.VarChar(255)
+  user_cloud_provider user_cloud_provider[]
+}
+
+model job_task {
+  id          BigInt  @id @default(autoincrement())
+  job_type_id BigInt
+  name        String? @db.VarChar(45)
+  script      String? @db.Text
+  params      String? @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model job_type {
+  id          Int    @id
+  action      String @db.VarChar(45)
+  queue       String @db.VarChar(45)
+  description String @db.VarChar(45)
+  command     String @db.Text
+  newstatus   Int
+}
+
+model jobs {
+  id          BigInt   @id
+  name        String   @db.VarChar(45)
+  timestamp   DateTime @default(now()) @db.Timestamp(0)
+  data        String   @db.Text
+  userid      BigInt
+  status      Int
+  appid       BigInt
+  jobtype     Int
+  job_task_id String   @db.VarChar(45)
+}
+
+model lookup_audit_type {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(45)
+  description String? @db.VarChar(255)
+}
+
+model lookup_environment {
+  id          Int    @id @default(autoincrement())
+  name        String @db.VarChar(20)
+  description String @db.VarChar(45)
+  app         app[]
+}
+
+model org {
+  id       BigInt @id @default(0)
+  name     String @db.VarChar(45)
+  parentid BigInt
+  owner    BigInt
+}
+
+model pricing {
+  id                BigInt    @id @default(autoincrement())
+  cloudid           Int
+  vm_size           String?   @db.VarChar(45)
+  vm_price_per_hour Decimal?  @db.Decimal(18, 9)
+  region            String?   @db.VarChar(255)
+  usage_type        String?   @db.VarChar(255)
+  memory            String?   @db.VarChar(100)
+  vcpu              Int?
+  sku               String    @db.VarChar(255)
+  timestamp         DateTime? @db.DateTime(0)
+  os                String?   @db.VarChar(100)
+  meta              Json?
+}
+
+model region_map {
+  id           Int    @id @default(autoincrement())
+  pricing_term String @db.VarChar(200)
+  value        String @db.VarChar(45)
+}
+
+model user {
+  userid                Int                     @id @default(autoincrement())
+  email                 String                  @unique(map: "email_UNIQUE") @db.VarChar(45)
+  password              String                  @db.VarChar(255)
+  username              String                  @unique(map: "username_UNIQUE") @db.VarChar(45)
+  status                Int
+  timestamp             BigInt
+  confirmcode           String?                 @unique(map: "confirmcode_UNIQUE") @db.VarChar(255)
+  lastloggedin          String?                 @db.VarChar(45)
+  first                 String?                 @db.VarChar(45)
+  last                  String?                 @db.VarChar(45)
+  temp_code             Int?
+  temp_code_expiry      BigInt?
+  uniqueid              String?                 @unique(map: "uniqueid_UNIQUE") @db.VarChar(255)
+  app                   app[]
+  user_cloud_provider   user_cloud_provider[]
+  user_data_aws_configs user_data_aws_configs[]
+}
+
+model user_cloud_provider {
+  id                  Int                   @id @default(autoincrement())
+  userid              Int
+  cloud_provider_id   Int
+  aws_account_id      String?               @db.VarChar(45)
+  isDefault           Int?                  @db.TinyInt
+  name                String?               @db.VarChar(255)
+  status              Int                   @default(0)
+  cloud_provider      cloud_provider        @relation(fields: [cloud_provider_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_cloud_provider_id")
+  user                user                  @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction, map: "FK_userid")
+  user_data_providers user_data_providers[]
+
+  @@index([cloud_provider_id], map: "FK_cloud_provider_id_idx")
+  @@index([userid], map: "userid_idx")
+}
+
+model user_data_aws_configs {
+  id                     Int     @id @default(autoincrement())
+  name                   String? @db.VarChar(255)
+  userid                 Int
+  vpc                    String  @db.VarChar(45)
+  app_subnet             String  @db.VarChar(1000)
+  db_subnet              String? @db.VarChar(1000)
+  elb_sg                 String? @db.VarChar(1000)
+  app_sg                 String  @db.VarChar(1000)
+  db_sg                  String? @db.VarChar(1000)
+  app_instance_type      String? @db.VarChar(45)
+  db_instance_type       String? @db.VarChar(45)
+  cache_instance_type    String? @db.VarChar(45)
+  custom_data            Bytes?  @db.Blob
+  region                 String  @db.VarChar(45)
+  user_cloud_provider_id BigInt?
+  status                 Int     @default(0)
+  app                    app[]
+  user                   user    @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_aws_config_user_id")
+
+  @@index([userid], map: "FK_user_aws_config_user_id_idx")
+}
+
+model user_data_providers {
+  id                     Int                 @id @default(autoincrement())
+  user_cloud_provider_id Int
+  aws_auth_method        String?             @db.VarChar(45)
+  auth_data              String?             @db.Text
+  access_type            String?             @db.VarChar(45)
+  externalId             String?             @db.VarChar(255)
+  app                    app[]
+  user_cloud_provider    user_cloud_provider @relation(fields: [user_cloud_provider_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_user_cloud_provider_id")
+
+  @@index([user_cloud_provider_id], map: "FK_user_cloud_provider_id_idx")
+}
+
+model user_integrations {
+  id            BigInt   @id
+  userid        BigInt
+  integrationid Int
+  credentials   String   @db.Text
+  date_added    DateTime @db.DateTime(0)
+}
+
+model user_org {
+  id          BigInt  @id @default(autoincrement())
+  userid      BigInt
+  orgid       BigInt
+  permissions String? @db.VarChar(45)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user_sub {
+  subid              Int    @id @default(autoincrement())
+  userid             Int
+  stripe_sub_id      String @db.VarChar(255)
+  stripe_customer_id String @db.VarChar(255)
+  stripe_session_id  String @db.VarChar(255)
+  sub_status         Int    @default(0) @db.TinyInt
+  timestamp          BigInt
+}

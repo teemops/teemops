@@ -1,0 +1,5 @@
+#remove any sensitive files including .env from anywhere in the project
+.env
+#ignore all state files
+.teemops
+.teemops/state

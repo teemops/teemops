@@ -1,0 +1,84 @@
+#SAM template
+
+Resources:
+  TopsAuditSQS:
+    Type: AWS::SQS::Queue
+    Properties:
+      # FifoQueue: true
+      QueueName: teemops_audit
+      VisibilityTimeout: 300
+      MessageRetentionPeriod: 86400
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - TopsAuditSQSDLQ
+            - Arn
+        maxReceiveCount: 5
+  TopsAuditRegionSQS:
+    Type: AWS::SQS::Queue
+    Properties:
+      # FifoQueue: true
+      QueueName: teemops_audit_region
+      VisibilityTimeout: 300
+      MessageRetentionPeriod: 86400
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - TopsAuditSQSDLQ
+            - Arn
+        maxReceiveCount: 5
+  TopsAuditSQSDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      # FifoQueue: true
+      QueueName: teemops_audit_dlq
+      VisibilityTimeout: 300
+      MessageRetentionPeriod: 86400
+  TopsAuditResults:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: topsless_audit_results
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: resultid
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: N
+        - AttributeName: auditid
+          AttributeType: S
+        - AttributeName: result
+          AttributeType: S
+      KeySchema:
+        - AttributeName: resultid
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: auditid-index
+          KeySchema:
+            - AttributeName: auditid
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          # ProvisionedThroughput:
+          #   ReadCapacityUnits: 10
+          #   WriteCapacityUnits: 10
+        - IndexName: result-index
+          KeySchema:
+            - AttributeName: result
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          # ProvisionedThroughput:
+          #   ReadCapacityUnits: 10
+          #   WriteCapacityUnits: 10
+      # ProvisionedThroughput:
+      # #set PAY_PER_REQUEST for on-demand
+      #   ReadCapacityUnits: 10
+      #   WriteCapacityUnits: 10
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE

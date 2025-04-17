@@ -1,0 +1,37 @@
+Resources:
+  TeemOpsBasicRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+                - "cloudformation.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - 'ssm:GetParameter'
+                Effect: Allow
+                Resource: '*'
+          PolicyName: CustomSSMPolicy
+  TeemOpsBasicInstanceProfile:
+      Type: "AWS::IAM::InstanceProfile"
+      Properties:
+        Roles:
+          - !Ref TeemOpsBasicRole
+        InstanceProfileName: "TeemOpsBasicInstanceProfile"
+Outputs:
+  InstanceProfile:
+    Value: !GetAtt
+      - TeemOpsBasicInstanceProfile
+      - Arn

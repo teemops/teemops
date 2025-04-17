@@ -1,0 +1,7 @@
+---
+project: scg
+git_branch: work
+envname: dev
+domain: app.auditaws.cloud
+region: us-west-2
+

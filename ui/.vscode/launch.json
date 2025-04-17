@@ -1,0 +1,58 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "client: chrome",
+            "runtimeExecutable": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/*"
+            }
+        },
+        {
+            "name": "launch: npm",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "dev"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "server: nuxt",
+            "args": [
+                "dev"
+            ],
+            "osx": {
+                "program": "${workspaceFolder}/node_modules/.bin/nuxt"
+            },
+            "linux": {
+                "program": "${workspaceFolder}/node_modules/.bin/nuxt"
+            },
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/nuxt/bin/nuxt.js"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "fullstack: nuxt",
+            "configurations": [
+                "launch: npm",
+                "client: chrome"
+            ]
+        }
+    ]
+}

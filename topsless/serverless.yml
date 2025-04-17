@@ -1,0 +1,397 @@
+# Teem Ops Topsless Services
+
+service: topsless
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: ${opt:region, self:custom.defaults.region}
+  stage: ${opt:stage, self:custom.defaults.stage}
+  memorySize: 512
+  vpc:
+    securityGroupIds:
+      - ${self:custom.securityGroupId.${self:provider.stage}}
+    subnetIds:
+      - ${self:custom.subnetId.${self:provider.stage}}
+  iamRoleStatements: # permissions for all of your functions can be set here
+    - Effect: Allow
+      Action: # Gives permission to Assume roles to other accounts
+        - sts:AssumeRole
+      Resource: "arn:aws:iam::*:role/*TeemOps*"
+    - Effect: Allow
+      Action: # Gives permission to Assume roles to other accounts
+        - sts:AssumeRole
+      Resource: "arn:aws:iam::*:role/*TopsAuditSetup*"
+    - Effect: Allow
+      Action: # Gives permission to Assume roles to other accounts for an audit
+        - sts:AssumeRole
+      Resource: "arn:aws:iam::*:role/*TopsAuditRO*"
+    - Effect: Allow
+      Action: # Gives permission to EC2
+        - ec2:*
+      Resource: "*"
+    - Effect: Allow
+      Action: # Gives permission to Dynamo
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchGetItem
+        - dynamodb:Query
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
+      Resource: "arn:aws:dynamodb:*"
+    #give permissions to SQS
+    - Effect: Allow
+      Action:
+        - sqs:*
+      Resource: "arn:aws:sqs:*"
+    #deny creation or deletion of sqs queues
+    - Effect: Deny
+      Action:
+        - sqs:CreateQueue
+        - sqs:DeleteQueue
+      Resource: "*"
+  environment:
+    TOPS_SECRET: ${ssm:/${opt:stage, self:custom.defaults.stage}/tops/secret, env:TOPS_SECRET}
+    CRYPTO_SECRET: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/crypto-secret, env:CRYPTO_SECRET}
+    CRYPTO_USER: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/crypto-user, env:CRYPTO_USER}
+    MYSQL_HOST: ${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-host, self:custom.database.host, env:MYSQL_HOST}
+    MYSQL_DB: ${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-name, self:custom.database.database, env:MYSQL_DB}
+    #${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-name, self:custom.database.database, env:MYSQL_DB}
+    MYSQL_USER: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/rds/db-user, env:MYSQL_USER}
+    MYSQL_PASS: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/rds/db-pass, env:MYSQL_PASS}
+    SQS_QUEUE_NAME: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/sqs/queue-url, env:SQS_QUEUE_NAME}
+    SQS_ENDPOINT: ${env:SQS_ENDPOINT, self:custom.defaults.sqsEndpoint}
+  apiGateway:
+    # generate apikey automatically
+    apiKeys:
+      - name: testKey
+        value: uybas7b9ubas9n09898an98sn0
+      - ${self:custom.apiKeyNames.auth}
+      - ${self:custom.apiKeyNames.core}
+
+functions:
+  listOS:
+    handler: templates.list
+    description: List all Operating Systems and Pre packaged templates available on Teemops
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: templates
+          method: get
+          cors:
+            origins:
+              - "*"
+  getAMI:
+    handler: ami.view
+    description: Provides AMI ID for provided region, cloud_provider_id(1) and app_provider_id
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: amis/view
+          method: post
+          cors:
+            origins:
+              - "*"
+  searchAMIs:
+    handler: ami.search
+    description: Provides all AMIs for a pattern
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: amis/search
+          method: get
+          cors:
+            origins:
+              - "*"
+  generate:
+    handler: accounts.generateCode
+    description: Generates new unique account code for use in CFN templates and for STS external IDs
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: account/generate
+          method: post
+          cors:
+            origins:
+              - "*"
+  updateAMIs:
+    handler: ami.update
+    description: UPDATE AMIs
+    timeout: 30
+    memorySize: 1024
+    events:
+      - schedule:
+          name: sched-every-hour
+          description: "Scheduled update of AMIs"
+          rate: cron(0 9 ? * * *)
+          # rate: rate(1 hour)
+          # input:
+          #   entity: "schedule"
+          #   period: 7
+  auditFindings:
+    handler: audit.findings
+    description: View Findings for an audit
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: audit/findings
+          method: post
+          authorizer: ${self:custom.authorizer}
+          cors:
+            origins:
+              - "*"
+  auditRealtime:
+    handler: audit.findingsRealtime
+    description: Evaluate and Display Findings for an audit in realtime
+    timeout: 240
+    memorySize: 1024
+    events:
+      - http:
+          path: audit/findingsrealtime
+          method: post
+          authorizer: ${self:custom.authorizer}
+          cors:
+            origins:
+              - "*"
+  auditList:
+    handler: audit.list
+    description: List audit scans for a user.
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: audit/list
+          method: get
+          authorizer: ${self:custom.authorizer}
+          cors:
+            origins:
+              - "*"
+  auditStart:
+    handler: audit.start
+    description: request a new audit to be started
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: audit/start
+          method: post
+          authorizer: ${self:custom.authorizer}
+          cors:
+            origins:
+              - "*"
+  auditScan:
+    handler: audit.scan
+    description: Run the audit scan
+    timeout: 300
+    memorySize: 1024
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - TopsAuditSQS
+              - Arn
+  auditScanRegion:
+    handler: audit.scanRegion
+    description: Run the audit scan in a given region
+    timeout: 300
+    memorySize: 1024
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - TopsAuditRegionSQS
+              - Arn
+  authToken:
+    handler: auth.handler
+    description: Authorizer function for API Gateway
+    timeout: 15
+    memorySize: 256
+  authVerify:
+    handler: auth.verify
+    description: Verify the token for a user via the mfa-auth apikey
+    timeout: 10
+    memorySize: 256
+    events:
+      - http:
+          path: mfa_auth/token/verify
+          private: true
+          method: post
+          cors:
+            origins:
+              - "*"
+  getInsights:
+    handler: insights.stats
+    description: Get insights for a user
+    timeout: 30
+    memorySize: 1024
+    events:
+      - http:
+          path: insights/stats
+          method: post
+          authorizer: ${self:custom.authorizer}
+          cors:
+            origins:
+              - "*"
+  getRecommendations:
+    handler: insights.recommend
+    description: Get recommendations for a user
+    timeout: 30
+    memorySize: 1024
+    events:
+      - http:
+          path: recommendations/get
+          method: get
+          authorizer: ${self:custom.authorizer}
+          cors:
+            origins:
+              - "*"
+
+custom:
+  defaults:
+    stage: dev
+    region: us-west-2
+    sqsEndpoint: sqs.us-west-2.amazonaws.com
+  apiKeyNames:
+    auth: mfa-auth
+    core: core-api
+  authorizer:
+    name: authToken
+    # handler: auth.handler
+    identitySource: method.request.header.Authorization
+    resultTtlInSeconds: 0
+    identityValidationExpression: "Bearer .*"
+    type: token
+  database:
+    host: 127.0.0.1
+    database: teem
+    user: teem
+    password: project
+  serverless-offline:
+    # httpsProtocol: "dev-certs"
+    httpPort: 8081
+    stageVariables:
+      stage: "dev"
+  serverless-offline-sqs:
+    autoCreate: true # create queue if not exists
+    apiVersion: "2012-11-05"
+    endpoint: http://host.docker.internal:9324
+    region: us-west-2
+    accessKeyId: root
+    secretAccessKey: root
+    skipCacheInvalidation: false
+  stages:
+    - beta
+    - dev
+    - prod
+  securityGroupId:
+    local: sg-local
+    beta: ${env:SECURITY_GROUP_ID}
+    dev: sg-dev
+    prd: sg-prd
+  subnetId:
+    local: subnet-local
+    beta: ${env:SUBNET_ID}
+    dev: subnet-dev
+    prd: subnet-prd
+  output:
+    handle: scripts/output.process
+    file: conf/output.json
+
+resources:
+  Resources:
+    TopsAuditSQS:
+      Type: AWS::SQS::Queue
+      Properties:
+        # FifoQueue: true
+        QueueName: teemops_audit
+        VisibilityTimeout: 300
+        MessageRetentionPeriod: 86400
+        RedrivePolicy:
+          deadLetterTargetArn:
+            Fn::GetAtt:
+              - TopsAuditSQSDLQ
+              - Arn
+          maxReceiveCount: 5
+    TopsAuditRegionSQS:
+      Type: AWS::SQS::Queue
+      Properties:
+        # FifoQueue: true
+        QueueName: teemops_audit_region
+        VisibilityTimeout: 300
+        MessageRetentionPeriod: 86400
+        RedrivePolicy:
+          deadLetterTargetArn:
+            Fn::GetAtt:
+              - TopsAuditSQSDLQ
+              - Arn
+          maxReceiveCount: 5
+    TopsAuditSQSDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        # FifoQueue: true
+        QueueName: teemops_audit_dlq
+        VisibilityTimeout: 300
+        MessageRetentionPeriod: 86400
+    TopsAuditResults:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: topsless_audit_results
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: resultid
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+          - AttributeName: auditid
+            AttributeType: S
+          - AttributeName: result
+            AttributeType: S
+        KeySchema:
+          - AttributeName: resultid
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: auditid-index
+            KeySchema:
+              - AttributeName: auditid
+                KeyType: HASH
+              - AttributeName: timestamp
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            # ProvisionedThroughput:
+            #   ReadCapacityUnits: 10
+            #   WriteCapacityUnits: 10
+          - IndexName: result-index
+            KeySchema:
+              - AttributeName: result
+                KeyType: HASH
+              - AttributeName: timestamp
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            # ProvisionedThroughput:
+            #   ReadCapacityUnits: 10
+            #   WriteCapacityUnits: 10
+        # ProvisionedThroughput:
+        # #set PAY_PER_REQUEST for on-demand
+        #   ReadCapacityUnits: 10
+        #   WriteCapacityUnits: 10
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-offline-sqs
+  - serverless-stack-output

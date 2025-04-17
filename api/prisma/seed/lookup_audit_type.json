@@ -1,0 +1,2 @@
+[{"id":1, "name":"audit.s3", "description":"Scan your S3 Buckets"},
+ {"id":2, "name":"audit.iam", "description":"Scan your IAM Resources"}]
