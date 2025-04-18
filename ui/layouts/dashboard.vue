@@ -4,7 +4,7 @@
       <template v-slot:prepend>
         <div class="pa-2 text-center">
           <br />
-          <img src="~/assets/site-logo.png" height="40px" />
+          <img src="~/assets/teemops-icon.png" height="40px" />
         </div>
       </template>
       <v-list>

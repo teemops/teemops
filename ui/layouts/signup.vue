@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-app-bar fixed app>
-      <nuxt-link to="/"><img src="~/assets/TeemLogo1ps-small.png" height="40px" /></nuxt-link>
+      <nuxt-link to="/"><img src="~/assets/teemops-logo.png" height="40px" /></nuxt-link>
 
       <v-spacer />
       <b>Teemops</b>
@@ -15,7 +15,7 @@
     <v-footer :padless="true">
       <v-card flat tile width="100%" class="secondary lighten-1 text-center">
         <v-card-text class="white--text">
-          <strong>Teem Services Limited &copy; Copyright</strong>
+          <strong>Teemops &copy; Copyright</strong> Ben Fellows & Teem Services Limited
           {{ new Date().getFullYear() }}
           &nbsp;
           <a target="_blank" class="secondary" style="text-decoration: none"
