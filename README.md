@@ -2,7 +2,17 @@
 
 Teemops is simplified AWS (Amazon Web Services) management.
 
-Join Slack Channel: http://bit.ly/topslack
+## Features
+
+Features are as follows:
+* Audit AWS Account(s)
+* Security insights and recommendations
+* Signup and register
+* API for devops/security automation
+
+## Community
+
+Join Telegram Channel: https://t.me/teemops
 
 It consists of a UI, API and back end processing services.
 
@@ -50,3 +60,9 @@ Teemops requires the ability to do the following in your root AWS account:
 - CloudFormation
 - Lambda
 - DynamoDB
+
+
+# License
+
+GNU license is the current license being applied to this code. (The exact license may change in the future, but the intention for community edition is free, open source and able to be freely distributed without fear of any licensing restrictions).
+
