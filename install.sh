@@ -13,14 +13,18 @@ echo -e "${COLORS_GREEN}"
 # This script is used to install TeemOps and its dependencies.
 cat << EOF
 
-░▒▓████████▓▒░▒▓████████▓▒░▒▓████████▓▒░▒▓██████████████▓▒░ ░▒▓██████▓▒░░▒▓███████▓▒░ ░▒▓███████▓▒░ 
-   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░        
-   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░        
-   ░▒▓█▓▒░   ░▒▓██████▓▒░ ░▒▓██████▓▒░ ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░ ░▒▓██████▓▒░  
-   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░             ░▒▓█▓▒░ 
-   ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░             ░▒▓█▓▒░ 
-   ░▒▓█▓▒░   ░▒▓████████▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓█▓▒░      ░▒▓███████▓▒░  
-                                                                                                    
+ ███████████                                                             
+░█░░░███░░░█                                                             
+░   ░███  ░   ██████   ██████  █████████████    ██████  ████████   █████ 
+    ░███     ███░░███ ███░░███░░███░░███░░███  ███░░███░░███░░███ ███░░  
+    ░███    ░███████ ░███████  ░███ ░███ ░███ ░███ ░███ ░███ ░███░░█████ 
+    ░███    ░███░░░  ░███░░░   ░███ ░███ ░███ ░███ ░███ ░███ ░███ ░░░░███
+    █████   ░░██████ ░░██████  █████░███ █████░░██████  ░███████  ██████ 
+   ░░░░░     ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   ░███░░░  ░░░░░░  
+                                                        ░███             
+                                                        █████            
+                                                       ░░░░░             
+
 #######################################################################################################                                                                                                    
 #######################################################################################################
 #
@@ -303,6 +307,33 @@ fix_mysql_native_password() {
 
 list_options (){
     echo -e "${COLORS_RED}WARNING: The initial install time can take 2-4 minutes, please grab a cuppa.${COLORS_NC}"
+    echo "Arguments: $1"
+    #if the first argument is present e.g. ./install.sh action=install
+    if [ "$1" = "action=install" ]; then
+        echo -e "${COLORS_YELLOW}Running Install...${COLORS_NC}"
+        install_app
+        fix_mysql_native_password
+        exit
+    fi
+    #if the first argument is present e.g. ./install.sh action=update
+    if [ "$1" = "action=update" ]; then
+        echo -e "${COLORS_YELLOW}Running Update...${COLORS_NC}"
+        update_app
+        exit
+    fi
+    #if the first argument is present e.g. ./install.sh action=remove
+    if [ "$1" = "action=remove" ]; then
+        echo -e "${COLORS_YELLOW}Running Remove...${COLORS_NC}"
+        delete_app
+        exit
+    fi
+    #if the first argument is present e.g. ./install.sh action=cloudformation
+    if [ "$1" = "action=cloudformation" ]; then
+        echo -e "${COLORS_YELLOW}Running CloudFormation...${COLORS_NC}"
+        run_aws_install
+        exit
+    fi
+
     #Get arguments from user input
     OPTIONS="Install Update Remove Quit"
     select opt in $OPTIONS; do

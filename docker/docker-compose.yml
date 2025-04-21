@@ -37,6 +37,38 @@ services:
       - $PWD/nginx/sites-enabled:/etc/nginx/sites-enabled
     depends_on:
       - api
+  
+  topsless:
+    image: teem/topsless:${DOCKER_IMAGE_TAG:-dev}
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ${HOME}/.aws:/root/.aws
+      - ${PWD}/.teemops/state/serverless:/state
+    environment:
+      AWS_REGION: ${AWS_REGION}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASS: ${DB_PASS}
+      MYSQL_HOST: ${DB_HOST}
+      MYSQL_DB: ${DB_NAME}
+      TOPS_SECRET: ${SECRET}
+      CRYPTO_SECRET: ${CONFIRM_SECRET}
+      CRYPTO_USER: ${CONFIRM_SECRET}
+      SQS_QUEUE_NAME: teemops_audit
+      SQS_ENDPOINT: sqs.us-west-2.amazonaws.com
+      SECURITY_GROUP_ID: sg-local
+      SUBNET_ID: subnet-local
   api:
     # build:
     #   context: ./api

@@ -1,11 +1,15 @@
 
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
 var pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASS,
-    database: process.env.MYSQL_DB
+    database: process.env.MYSQL_DB,
+    idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0,
 });
 
 module.exports = function () {

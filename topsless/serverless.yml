@@ -58,8 +58,8 @@ provider:
     TOPS_SECRET: ${ssm:/${opt:stage, self:custom.defaults.stage}/tops/secret, env:TOPS_SECRET}
     CRYPTO_SECRET: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/crypto-secret, env:CRYPTO_SECRET}
     CRYPTO_USER: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/crypto-user, env:CRYPTO_USER}
-    MYSQL_HOST: ${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-host, self:custom.database.host, env:MYSQL_HOST}
-    MYSQL_DB: ${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-name, self:custom.database.database, env:MYSQL_DB}
+    MYSQL_HOST: ${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-host, env:MYSQL_HOST, self:custom.database.host}
+    MYSQL_DB: ${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-name, env:MYSQL_DB, self:custom.database.database}
     #${ssm:/${opt:stage, self:custom.defaults.stage}/app/rds/db-name, self:custom.database.database, env:MYSQL_DB}
     MYSQL_USER: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/rds/db-user, env:MYSQL_USER}
     MYSQL_PASS: ${ssm:/${opt:stage, self:custom.defaults.stage}/topsless/rds/db-pass, env:MYSQL_PASS}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-IMAGE_NAME="teem/tops-api"
+IMAGE_NAME="teem/topsless"
 TAG="dev"
 
 # Build the Docker image

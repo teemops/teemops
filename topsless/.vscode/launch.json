@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Debug Serverless Offline",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "/home/ben/.nvm/versions/node/v20.18.0/bin/npm",
+      "runtimeExecutable": "/usr/local/bin/npm",
       "runtimeArgs": [
         "run",
         "debug",
