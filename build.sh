@@ -11,13 +11,17 @@ echo "Stacks directory: $STACKS_DIR"
 
 if [ -d "$STACKS_DIR" ]; then
 
-    cd "$THIS_DIR/api"
-    # sh "$STACKS_DIR/api/build.sh"
-    sh "$STACKS_DIR/api/push.sh"
+    # cd "$THIS_DIR/api"
+    # # sh "$STACKS_DIR/api/build.sh"
+    # sh "$STACKS_DIR/api/push.sh"
 
-    cd "$THIS_DIR/ui"
-    # sh "$STACKS_DIR/ui/build.sh"
-    sh "$STACKS_DIR/ui/push.sh"
+    cd "$THIS_DIR/topsless"
+    # sh "$STACKS_DIR/topsless/build.sh"
+    sh "$STACKS_DIR/topsless/push.sh"
+
+    # cd "$THIS_DIR/ui"
+    # # sh "$STACKS_DIR/ui/build.sh"
+    # sh "$STACKS_DIR/ui/push.sh"
 
 else
     echo "Directory $STACKS_DIR does not exist."

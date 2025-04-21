@@ -35,32 +35,3 @@ module.exports.generateCode = async function (event, context) {
 
 }
 
-async function signup(email, password) {
-    try {
-
-        var defaultStatus = 0; //disabled by default
-        var timeNow = Date.now();
-        var confirmCode = pass.confirm(data.username + data.email + timeNow);
-        var sql = "INSERT INTO user(email, username, password, status, timestamp, confirmcode, first, last)";
-        sql += " VALUES(?, ?, MD5(?), ?, ?, ?, ?, ?)";
-
-        var params = [
-            email,
-            email,
-            pass.create(password),
-            defaultStatus,
-            timeNow,
-            confirmCode,
-            data.first,
-            data.last
-        ];
-
-        if (result) {
-
-        } else {
-
-        }
-    } catch (e) {
-        throw `Error registering user ${e}`
-    }
-}

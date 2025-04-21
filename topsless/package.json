@@ -1,13 +1,13 @@
 {
   "name": "topsless",
   "version": "1.0.0",
-  "description": "used for anonymous requests to get metadata from teemops e.g. amis",
+  "description": "used for requests to get metadata from teemops e.g. amis",
   "main": "os.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --stage dev --verbose",
+    "debug": "export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --host 0.0.0.0 --stage dev --verbose",
     "creds": "eval $(aws configure export-credentials --profile opsadmin --format env)",
-    "debugsso": "eval $(aws configure export-credentials --profile tdev --format env) && export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --stage dev --verbose"
+    "debugsso": "eval $(aws configure export-credentials --profile tdev --format env) && export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --host 0.0.0.0 --stage dev --verbose"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "jmespath": "^0.16.0",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
+    "mysql2": "^3.14.0",
     "otpauth": "^9.2.0",
     "serverless": "^3.37.0",
     "stripe": "^14.5.0"

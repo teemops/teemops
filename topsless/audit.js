@@ -1,4 +1,3 @@
-
 // //require aws sdk ec2
 var AWSEC2 = require('aws-sdk');
 //require('aws-sdk/lib/maintenance_mode_message').suppress = true;
