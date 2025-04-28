@@ -7,9 +7,18 @@ Teemops simplifies AWS Security and provides insights for the following:
 
 ## Install
 
+Pre-requisites:
+- Check docker is installed <a target="_blank" rel="noopener noreferrer" href="https://docs.docker.com/engine/install/">Docker Install</a>
+- Check Node is installed <a target="_blank" rel="noopener noreferrer" href="https://nodejs.org/en/download/">Node Install</a>
+- Check AWS CLI V2 is installed <a target="_blank" rel="noopener noreferrer" href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">AWS CLI Install</a>
+- An AWS account with permissions to create IAM roles, SQS queues, S3 buckets, Lambda functions and DynamoDB tables.
+
 Quick setup (docker compose support):
 
 ```
+# add your user to the docker group
+sudo usermod -aG docker $USER
+
 mkdir teemops && cd teemops
 bash <(curl -s https://raw.githubusercontent.com/teemops/teemops/master/install.sh)
 ```
