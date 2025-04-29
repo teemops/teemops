@@ -9,10 +9,10 @@ module.exports = function () {
         init: function init(appConfig) {
             config = appConfig;
             auth_host = process.env.SMTP_HOST;
-            if (auth_host=="maildev") {
+            if (auth_host=="maildev" || process.env.SMTP_USER=="") {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
                 transporter = nodemailer.createTransport({
-                    host: "maildev",
+                    host: auth_host,
                     port: 1025,
                     secure: false, // true for 465, false for other ports
                     tls: {
