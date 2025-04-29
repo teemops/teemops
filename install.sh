@@ -210,7 +210,7 @@ install_app() {
     if [ ! -d "$DOCKER_DIR" ] ; then
         echo "Pulling down the rest of the repo as well"
         #now pull down all other assets
-        #git clone $REPO_THIS
+        git clone $REPO_THIS
         # Navigate to the newly cloned folder
         cd teemops
     fi
