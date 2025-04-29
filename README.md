@@ -16,13 +16,17 @@ Pre-requisites:
 Quick setup (docker support):
 
 ```
+mkdir teemops && cd teemops
+bash <(curl -s https://raw.githubusercontent.com/teemops/teemops/master/install.sh)
+```
+
+Optional:
+If you're having issues with docker or permissions you can run the following to ensure you have the correct permissions:
+```
 # add your user to the docker group
 sudo usermod -aG docker $USER
 #update user permissions in the current session
 newgrp docker
-
-mkdir teemops && cd teemops
-bash <(curl -s https://raw.githubusercontent.com/teemops/teemops/master/install.sh)
 ```
 
 ## Features
