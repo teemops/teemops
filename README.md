@@ -1,11 +1,20 @@
 # Teemops
 
-Teemops simplifies AWS Security and provides insights for the following:
+![](https://raw.githubusercontent.com/teemops/teemops/master/ui/assets/images/teemops.gif)
+
+## What is Teemops?
+Teemops is a security and compliance tool for AWS accounts.
+
+Teemops simplifies AWS Security by providing insights for the following:
 * IAM Configuration
 * EC2 Instances
 * S3 Bucket Configuration
+* Security Groups
+* Current Resources
 
 ## Install
+
+![](https://raw.githubusercontent.com/teemops/teemops/master/ui/assets/images/teemops-install.png)
 
 Pre-requisites:
 - Check docker is installed [Docker Install](https://docs.docker.com/get-docker/)
@@ -19,6 +28,7 @@ Quick setup (docker support):
 mkdir teemops && cd teemops
 bash <(curl -s https://raw.githubusercontent.com/teemops/teemops/master/install.sh)
 ```
+
 
 Optional:
 If you're having issues with docker or permissions you can run the following to ensure you have the correct permissions:
