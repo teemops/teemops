@@ -10,24 +10,35 @@ Parameters:
     Description: "Teemops SQS Region"
     Default: "us-west-2"
 Resources:
+  TopsMainSQS:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Ref SQSLabel
+      VisibilityTimeout: 60
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::Join:
+            - ""
+            - - "arn:aws:sqs:"
+              - !Ref SQSRegion
+              - ":"
+              - !Ref "AWS::AccountId"
+              - ":"
+              - !Ref SQSLabel
+        maxReceiveCount: 5
   TopsMainSQSPolicy:
     Type: AWS::SQS::QueuePolicy
+    DependsOn: TopsMainSQS
     Properties:
       Queues:
-        - Fn::Join:
-            - ""
-            - - "https://sqs."
-              - !Ref SQSRegion
-              - ".amazonaws.com/"
-              - !Ref "AWS::AccountId"
-              - "/"
-              - !Ref SQSLabel
+        - !Ref TopsMainSQS
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Sid: allow-sns-topsa
             Effect: Allow
-            Principal: "*"
+            Principal:
+              Service: sns.amazonaws.com
             Action:
               - SQS:SendMessage
               - SQS:ReceiveMessage
@@ -48,3 +59,25 @@ Resources:
                       - - "arn:aws:sns:*:"
                         - !Ref "AWS::AccountId"
                         - ":teemops-sns"
+          - Sid: allow-status-app
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - SQS:SendMessage
+              - SQS:ReceiveMessage
+              - SQS:DeleteMessage
+              - SQS:GetQueueUrl
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:sqs:"
+                    - !Ref SQSRegion
+                    - ":"
+                    - !Ref "AWS::AccountId"
+                    - ":"
+                    - !Ref SQSLabel
+            Condition:
+              StringEquals:
+                #ensure it is this account
+                "aws:SourceOwner": !Ref "AWS::AccountId"    
+

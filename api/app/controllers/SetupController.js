@@ -2,6 +2,7 @@
 var config, cfn, kms, jobsQName, jobsQRegion, awsAccountId;
 const KEYSTORE_TEMPLATE = 's3.keyStore';
 const SNS_TEMPLATE = 'sns.topic';
+const SQS_TEMPLATE = 'sqs.queue';
 const IAM_ROOT_TEMPLATE = 'iam.ec2.root.role';
 const DEFAULT_CONFIG_PATH = 'app/config/config.json';
 const CFN_STACK_EXCLUDED_REGIONS = ['eu-north-1'];

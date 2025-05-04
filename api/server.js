@@ -26,35 +26,10 @@ var setup = require("./app/controllers/SetupController.js");
 var security = require('./app/security/index');
 
 config.load('./app/config/config.json');
-function setAWSProfile() {
-  const exec = require('child_process').exec;
-  return new Promise((resolve, reject) => {
-    //returns json with credentials
-
-    const cmd = 'aws configure export-credentials --profile opsadmin';
-    exec(cmd, (err, stdout, stderr) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      //get json values from output
-      const json = JSON.parse(stdout);
-      //set environment variables
-      process.env.AWS_ACCESS_KEY_ID = json.AccessKeyId;
-      process.env.AWS_SECRET_ACCESS_KEY = json.SecretAccessKey;
-      process.env.AWS_SESSION_TOKEN = json.SessionToken;
-      resolve();
-    });
-  });
-}
 
 // Start function
 const startSetup = async function () {
   try {
-    if (process.env.MODE == 'dev') {
-      console.log('Setting up AWS profile');
-      //await setAWSProfile();
-    }
     const setupResult = await setup.init(config);
     if (setupResult) {
       console.log('Setup completed succesfully... initialising app');
