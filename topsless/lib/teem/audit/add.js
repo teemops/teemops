@@ -8,7 +8,6 @@ var config = {
     region: process.env.AWS_REGION
 }
 
-
 var aws
 // (async (config) => {
 //     aws = await awsLib('EC2', config)

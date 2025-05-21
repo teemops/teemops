@@ -1,7 +1,6 @@
 const tHttp = require('./lib/teem/http')
 const db = require('./drivers/mysql')
 
-
 /**
  * List OS templates available in teemops
  *

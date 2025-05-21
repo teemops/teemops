@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --host 0.0.0.0 --stage dev --verbose",
     "creds": "eval $(aws configure export-credentials --profile opsadmin --format env)",
-    "debugsso": "eval $(aws configure export-credentials --profile tdev --format env) && export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --host 0.0.0.0 --stage dev --verbose"
+    "debugsso": "eval $(aws configure export-credentials --profile tdev --format env) && export SLS_DEBUG=* &&  node  --trace-warnings --inspect node_modules/serverless/bin/serverless offline --httpPort 8081 --host 0.0.0.0 --stage dev --verbose",
+    "service": "MODE=dev pm2-runtime runtime.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "@customerio/cdp-analytics-node": "^0.1.3",
     "axios": "^1.6.2",
     "crypto-js": "^4.2.0",
+    "dotenv": "^16.5.0",
     "hi-base32": "^0.5.1",
     "jmespath": "^0.16.0",
     "jsonwebtoken": "^9.0.2",

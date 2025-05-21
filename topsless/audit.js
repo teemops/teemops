@@ -67,7 +67,7 @@ module.exports.scan = async function (event, context) {
 
         const record = event.Records[0]
         console.log(JSON.stringify(record))
-        const body = JSON.parse(record.body)
+        const body = JSON.parse(record.Body)
         const result = await audit.get(body.audit_scan_id)
         const userId = result.user_id
         const stsCreds = await core.cloudProvider.get(userId, result.user_cloud_provider_id)

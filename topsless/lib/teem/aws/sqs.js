@@ -1,4 +1,4 @@
-//used for getting ssm pareameters secrets
+//used for getting ssm param secrets
 const at = require('./awsTask');
 const { SQSClient } = require('@aws-sdk/client-sqs');
 const sts = require('./sts');
@@ -35,3 +35,4 @@ async function getParam(key) {
         throw e;
     }
 }
+

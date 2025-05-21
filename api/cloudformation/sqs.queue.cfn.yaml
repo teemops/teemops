@@ -41,7 +41,6 @@ Resources:
               Service: sns.amazonaws.com
             Action:
               - SQS:SendMessage
-              - SQS:ReceiveMessage
             Resource:
               - Fn::Join:
                   - ""

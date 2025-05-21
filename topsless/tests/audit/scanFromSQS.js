@@ -9,7 +9,7 @@ const run = async function (callback) {
                 {
                     messageId: '57aa4cd1-7871-40c5-8261-0e24e57b1173',
                     receiptHandle: 'gUajgnfNtn75KR2h7/k/oOmiQw21uAW6rIjwUR/2UdAPYZ2m1uPjXKo3Ytuym6L+tKvQKtlcy15UylJmjrOHCKkcEDLjeNC7BNIGljOv1TSbulhNq4wG7AwiOyOTgRvyY8Wl1YjyOo5DsKBBQ1YeuhRjwvD2NzLjyTEeGCzLAvRbIJZw05tV6WS7BdMYlRUZIMQrCncmDTJQ+Y0lT4gTRbsaRHsmcf+pKcbejOqEXBV3QzjlqMmDWs6QCTX7lLPHFnKytE4mrI0ICkQuNJvj8nXhCrO36yehn/kUEtJKyPkCdGF9AD0NV1vtDnqkJpllsrdBblmWo8DcP9N2zPr4WfnHXGlVlQgEcdXlFAlX2Oa/8HniKV88/Q==',
-                    body: '{"audit_scan_id":13}',
+                    Body: '{"audit_scan_id":2}',
                     attributes: [Object],
                     messageAttributes: [Object],
                     md5OfMessageAttributes: 'b4c49dc2bfece205e219bae6f28346bd',

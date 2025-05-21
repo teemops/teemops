@@ -51,7 +51,7 @@ function checkRule(rule, findings) {
 
 function checkItem(item, rule) {
     try {
-        const r = JSON.parse(item.result)
+        const r = item.result
         var item = {
             ...item,
             compliant: false

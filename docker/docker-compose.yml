@@ -69,6 +69,28 @@ services:
       SQS_ENDPOINT: sqs.us-west-2.amazonaws.com
       SECURITY_GROUP_ID: sg-local
       SUBNET_ID: subnet-local
+  auditservice:
+    command: npm run service
+    image: teem/topsless:${DOCKER_IMAGE_TAG:-dev}
+    restart: always
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ${HOME}/.aws:/root/.aws
+    environment:
+      AWS_REGION: ${AWS_REGION}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASS: ${DB_PASS}
+      MYSQL_HOST: ${DB_HOST}
+      MYSQL_DB: ${DB_NAME}
+      TOPS_SECRET: ${SECRET}
+      CRYPTO_SECRET: ${CONFIRM_SECRET}
+      CRYPTO_USER: ${CONFIRM_SECRET}
+      SQS_QUEUE_NAME: teemops_audit
+      SQS_ENDPOINT: sqs.us-west-2.amazonaws.com
+      SECURITY_GROUP_ID: sg-local
+      SUBNET_ID: subnet-local
   api:
     # build:
     #   context: ./api
