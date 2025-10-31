@@ -103,6 +103,39 @@ Teemops requires the ability to do the following in your root AWS account:
 - Lambda
 - DynamoDB
 
+# EC2 - Simple Deployment and Configuration
+
+## Setup of EC2
+
+The following steps outline how to setup the Teemops application on an EC2 instance.
+
+```bash
+#run from root of project
+sh ./infra/utils/deploy/setup.sh prod
+```
+
+## Deployment to EC2 - Simple Deployment
+
+The following steps outline how to deploy the Teemops application to an EC2 instance.
+
+```bash
+#run from root of project
+sh ./infra/utils/deploy/deploy.sh prod
+```
+
+## Connect to EC2
+
+```bash
+sh ./infra/utils/connect/ssh-proxy.sh
+```
+
+## Monitor EC2
+
+```bash
+sh ./infra/utils/monitor/logs.sh
+sh ./infra/utils/monitor/logs-status.sh
+```
+
 
 # Authors
 

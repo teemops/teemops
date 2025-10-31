@@ -1,0 +1,24 @@
+[Unit]
+Description=tops-api
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/apps/tops
+ExecStart= /root/.nvm/versions/node/v16.20.2/bin/npm run start-prod
+KillMode=process
+#erun as user ec2-user
+#User=ec2-user
+
+# Restart the service after 20 seconds
+Restart=always
+RestartPreventExitStatus=194
+RestartSec=20
+
+#logging
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tops-api
+
+[Install]
+WantedBy=multi-user.target
