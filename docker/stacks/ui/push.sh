@@ -2,7 +2,7 @@
 
 # Variables
 IMAGE_NAME="teem/tops-ui"
-TAG="dev"
+TAG="latest"
 
 # Build the Docker image
 echo "Building Docker image..."

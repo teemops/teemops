@@ -103,6 +103,13 @@ Teemops requires the ability to do the following in your root AWS account:
 - Lambda
 - DynamoDB
 
+
+# Authors
+
+Teemops was created by [Ben Fellows](https://github.com/sponsors/kiwifellows) and is maintained by him and a core team of contributors.
+
+If you would like to contribute to Teemops please see the [CONTRIBUTING.md](
+
 # License
 
 GNU license is the current license being applied to this code. (The exact license may change in the future, but the intention for community edition is free, open source and able to be freely distributed without fear of any licensing restrictions).
